@@ -11,9 +11,9 @@ function readSensors () {
 function displayReadings () {
     basic.showString("Air temp: " + convertToF(airTemp) + " deg F")
     basic.pause(200)
-    basic.showString("Humidity: " + humidity + "%")
+    basic.showString("Humidity: " + Math.round(humidity) + "%")
     basic.pause(200)
-    basic.showString("Pressure: " + convertToInchesMg(pressure) + " in Hg")
+    basic.showString("Pressure: " + Math.round(pressure) + " hPa")
     basic.pause(200)
     basic.showString("Rain: " + rain + " inches")
     basic.pause(200)
@@ -30,18 +30,15 @@ function displayReadings () {
 function sendReadings () {
     radio.sendValue("airTemp", convertToF(airTemp))
     radio.sendValue("humidity", humidity)
-    radio.sendValue("pressure", convertToInchesMg(pressure))
+    radio.sendValue("pressure", pressure)
     radio.sendValue("rain", rain)
     radio.sendValue("windSpeed", windSpeed)
     radio.sendString(windDirection)
     radio.sendValue("soilMoisture", soilMoisture)
     radio.sendValue("soilTemperature", convertToF(soilTemperature))
 }
-function convertToInchesMg (hPa: number) {
-    return Math.round(hPa * 0.02952998057228486)
-}
 function convertToF (tempC: number) {
-    return Math.round(9 / 5 * tempC)
+    return Math.round(9 / 5 * tempC + 32)
 }
 let soilMoisture = 0
 let soilTemperature = 0
