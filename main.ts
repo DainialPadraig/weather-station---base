@@ -1,11 +1,11 @@
 function readSensors () {
-    airTemp = weatherbit.temperature() / 100
+    airTemp = Math.idiv(weatherbit.temperature(), 100)
     humidity = weatherbit.humidity() / 1024
     pressure = weatherbit.pressure() / 25600
     rain = weatherbit.rain()
     windSpeed = weatherbit.windSpeed()
     windDirection = weatherbit.windDirection()
-    soilTemperature = weatherbit.soilTemperature() / 100
+    soilTemperature = Math.idiv(weatherbit.soilTemperature(), 100)
     soilMoisture = weatherbit.soilMoisture()
 }
 function displayReadings () {
@@ -37,6 +37,17 @@ function sendReadings () {
     radio.sendValue("soilMoisture", soilMoisture)
     radio.sendValue("soilTemperature", convertToF(soilTemperature))
 }
+function serialWriteReadings () {
+    serial.writeLine("Air temp: " + convertToF(airTemp) + " deg F")
+    serial.writeLine("Humidity: " + Math.round(humidity) + "%")
+    serial.writeLine("Pressure: " + Math.round(pressure) + " hPa")
+    serial.writeLine("Rain: " + rain + " in")
+    serial.writeLine("Wind speed: " + windSpeed + " mph")
+    serial.writeLine("Wind direction: " + windDirection)
+    serial.writeLine("Soil moisture: " + soilMoisture)
+    serial.writeLine("Soil temp: " + convertToF(soilTemperature) + " deg F")
+    serial.writeLine("")
+}
 function convertToF (tempC: number) {
     return Math.round(9 / 5 * tempC + 32)
 }
@@ -52,8 +63,10 @@ weatherbit.startWeatherMonitoring()
 weatherbit.startRainMonitoring()
 weatherbit.startWindMonitoring()
 radio.setGroup(20)
+serial.redirectToUSB()
 basic.forever(function () {
     readSensors()
     displayReadings()
     sendReadings()
+    serialWriteReadings()
 })
