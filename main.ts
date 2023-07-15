@@ -5,7 +5,7 @@ function readSensors () {
     rain = weatherbit.rain()
     windSpeed = weatherbit.windSpeed()
     windDirection = weatherbit.windDirection()
-    soilTemperature = weatherbit.soilTemperature()
+    soilTemperature = weatherbit.soilTemperature() / 100
     soilMoisture = weatherbit.soilMoisture()
 }
 function displayReadings () {
@@ -15,7 +15,7 @@ function displayReadings () {
     basic.pause(200)
     basic.showString("Pressure: " + Math.round(pressure) + " hPa")
     basic.pause(200)
-    basic.showString("Rain: " + rain + " inches")
+    basic.showString("Rain: " + rain + " in")
     basic.pause(200)
     basic.showString("Wind speed: " + windSpeed + " mph")
     basic.pause(200)
